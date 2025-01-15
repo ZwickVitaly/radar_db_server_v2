@@ -9,6 +9,8 @@ from settings import logger
 
 
 async def get_products_data(http_session, products, today_date):
+    print(products)
+    await asyncio.sleep(5)
     result_status = 0
     products_dict = products
     count = 1
@@ -27,7 +29,11 @@ async def get_products_data(http_session, products, today_date):
             ) as resp:
                 result_status = resp.status
                 content = resp.content
+                print(result_status)
+                await asyncio.sleep(5)
                 _data = await resp.json()
+                print(_data)
+                await asyncio.sleep(5)
                 if result_status != 200:
                     continue
             data = _data.get("data").get("products")
@@ -66,10 +72,10 @@ async def get_products_data(http_session, products, today_date):
                         )
             return new_data
 
-        except Exception as error:
-            print(
-                f"Error on products: {result_status} ::: (Error: {error}) sleep: {count * 0.5} (Content: {content})"
-            )
+        except:
+            # print(
+            #     f"Error on products: {result_status} ::: (Error: {error}) sleep: {count * 0.5} (Content: {content})"
+            # )
             _data = ""
             if "ClientConnectionError" in str(content) and count > 1:
                 return []
