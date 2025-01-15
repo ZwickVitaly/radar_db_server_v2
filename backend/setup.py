@@ -12,7 +12,7 @@ def setup_database():
             wb_id UInt32 CODEC(LZ4HC),
             date Date CODEC(LZ4HC),
             size String CODEC(LZ4HC),
-            warehouse UInt16 Codec(LZ4HC),
+            warehouse UInt32 Codec(LZ4HC),
             price UInt32 Codec(LZ4HC),
             quantity UInt32 Codec (LZ4HC),
             orders UInt32 Codec (LZ4HC)
