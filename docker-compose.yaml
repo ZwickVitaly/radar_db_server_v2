@@ -1,0 +1,59 @@
+services:
+  db:
+    image: clickhouse/clickhouse-server
+    container_name: ${CLICKHOUSE_DB_NAME}
+    volumes:
+      - ./app_data/db:/var/lib/clickhouse
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+    container_name: backend
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app_data/logs/searcher
+    ports:
+      - "9013:9013"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  redis:
+    container_name: ${REDIS_CONTAINER_NAME}
+    image: redis:7-alpine
+
+  celery:
+    build: .
+    container_name: celery_worker
+    entrypoint: celery -A celery_main.celery_app worker --autoscale=10,0 --loglevel=info
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app_data/logs/celery
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: .
+    container_name: celery_beat
+    entrypoint: celery -A celery_main.celery_app beat --loglevel=info
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app_data/logs/celery_beat
+    depends_on:
+        - redis
+
+
+networks:
+  wb_search:
