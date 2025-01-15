@@ -147,8 +147,8 @@ async def get_today_products_data(left, right):
                 FROM 
                     product_data AS pd 
                 WHERE 
-                    p.wb_id BETWEEN {left + 1} AND {left + page_size}
-                AND date = '{str(yesterday)}'
+                    pd.wb_id BETWEEN {left + 1} AND {left + page_size}
+                AND pd.date = '{str(yesterday)}'
                 GROUP BY
                     pd.wb_id
                 ORDER BY p.wb_id;"""
