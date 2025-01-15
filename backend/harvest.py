@@ -9,10 +9,9 @@ from settings import logger
 
 
 async def get_products_data(http_session, products, today_date):
-    print(products)
     await asyncio.sleep(5)
     result_status = 0
-    products_dict = products
+    products_dict = {key: val for p in products for key, val in p.items()}
     count = 1
     content = ""
     while result_status != 200 or count < 5:
