@@ -3,7 +3,7 @@ FROM python:3.12-alpine
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
-RUN RUN apk update && apk upgrade --no-cache
+RUN apk update && apk upgrade --no-cache
 RUN apk add build-base
 RUN apk add python3-dev
 RUN apk add musl-dev
