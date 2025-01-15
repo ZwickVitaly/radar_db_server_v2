@@ -12,6 +12,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - wb_search
 
 
   backend:
@@ -31,6 +33,9 @@ services:
   redis:
     container_name: ${REDIS_CONTAINER_NAME}
     image: redis:7-alpine
+    networks:
+      - wb_search
+
 
   celery:
     build: .
@@ -42,6 +47,8 @@ services:
       - ./logs:/app_data/logs/celery
     depends_on:
       - redis
+    networks:
+      - wb_search
 
   celery-beat:
     build: .
@@ -52,4 +59,10 @@ services:
     volumes:
       - ./logs:/app_data/logs/celery_beat
     depends_on:
-        - redis
+      - redis
+    networks:
+      - wb_search
+
+
+networks:
+  wb_search:
