@@ -110,7 +110,7 @@ async def get_today_products_data(left, right):
             yesterday = datetime.now().date() - timedelta(days=2)
         else:
             today = now.date()
-            yesterday = datetime.now().date() - timedelta(days=1)
+            yesterday = datetime.now().date()
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
         page_size = 100000
@@ -164,12 +164,12 @@ async def get_today_products_data(left, right):
                         await asyncio.sleep(1)
                 result_dict = {
                     wb_id: {
-                        f"{yesterday_data[0]}_{yesterday_data[1]}": {
-                            "quantity": yesterday_data[2],
-                            "price": yesterday_data[3]
+                        f"{day[0]}_{day[1]}": {
+                            "quantity": day[2],
+                            "price": day[3]
                         }
                     }
-                    for wb_id, yesterday_data in result
+                    for wb_id, yesterday_data in result for day in yesterday_data
                 }
                 products = [
                     {wb_id: result_dict.get(wb_id)}
