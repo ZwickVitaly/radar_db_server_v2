@@ -46,7 +46,7 @@ async def get_products_data(http_session, products, today_date):
                         wh_id = wh.get("wh")
                         qty = wh.get("qty")
                         if latest_data:
-                            prev_data = latest_data.get(f"{orig_name}__{wh_id}", {})
+                            prev_data = latest_data.get(f"{orig_name}_{wh_id}", {})
                             if not price:
                                 price = prev_data.get("price", 0)
                             orders = max(prev_data.get("quantity", 0) - qty, 0)
