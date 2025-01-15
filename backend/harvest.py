@@ -151,7 +151,7 @@ async def get_today_products_data(left, right):
                 AND pd.date = '{str(yesterday)}'
                 GROUP BY
                     pd.wb_id
-                ORDER BY p.wb_id;"""
+                ORDER BY pd.wb_id;"""
                 while True:
                     try:
                         print("trying to fetch")
