@@ -85,6 +85,7 @@ async def get_products_page_queue(
     http_session,
     today_date,
 ):
+    logger.info("http_worker ok")
     while True:
         product_batch = await http_queue.get()
         if product_batch is None:
@@ -177,7 +178,7 @@ async def get_today_products_data(left, right):
                 ]
                 print(len(products))
                 for i in range(0, len(products) + batch_size, batch_size):
-                    batch = result[i : i + batch_size]
+                    batch = products[i : i + batch_size]
                     if batch:
                         await http_queue.put(batch)
             await http_queue.put(None)
