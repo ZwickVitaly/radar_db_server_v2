@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager, contextmanager
 import clickhouse_connect
 from clickhouse_connect.driver.asyncclient import AsyncClient
-from clickhouse_connect.driver.client import Client
 
 from settings import CLICKHOUSE_CONFING
 
