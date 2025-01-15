@@ -147,7 +147,7 @@ async def get_today_products_data(left, right):
                 FROM 
                     product_data AS pd 
                 WHERE 
-                    pd.wb_id BETWEEN {left + 1} AND {left + page_size}
+                    pd.wb_id BETWEEN {range_id + 1} AND {range_id + page_size}
                 AND pd.date = '{str(yesterday)}'
                 GROUP BY
                     pd.wb_id
@@ -173,7 +173,7 @@ async def get_today_products_data(left, right):
                 }
                 products = [
                     {wb_id: result_dict.get(wb_id)}
-                    for wb_id in range(left + 1, left + page_size + 1)
+                    for wb_id in range(range_id + 1, range_id + page_size + 1)
                 ]
                 print(len(products))
                 for i in range(0, len(products) + batch_size, batch_size):
