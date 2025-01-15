@@ -1,15 +1,8 @@
-FROM python:3.12-alpine
+FROM python:3.12
 
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
-RUN echo http://dl-2.alpinelinux.org/alpine/ > /etc/apk/repositories; \
-    echo http://dl-3.alpinelinux.org/alpine/ > /etc/apk/repositories
-RUN apk update && apk upgrade --no-cache
-RUN apk add build-base
-RUN apk add python3-dev
-RUN apk add musl-dev
-RUN apk add linux-headers
 RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false \
