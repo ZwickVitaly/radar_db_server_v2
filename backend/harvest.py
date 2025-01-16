@@ -105,12 +105,12 @@ async def get_today_products_data(left, right):
     async with get_async_connection() as client:
         client: AsyncClient = client
         now = datetime.now()
-        if now.hour < 10:
-            today = now.date() - timedelta(days=1)
-            yesterday = datetime.now().date() - timedelta(days=2)
-        else:
-            today = now.date()
-            yesterday = datetime.now().date()
+        # if now.hour < 10:
+        #     today = now.date() - timedelta(days=1)
+        #     yesterday = datetime.now().date() - timedelta(days=2)
+        # else:
+        today = now.date()
+        yesterday = datetime.now().date()
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
         page_size = 100000
