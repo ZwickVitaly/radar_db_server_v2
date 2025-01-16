@@ -99,25 +99,47 @@ async def get_products_page_queue(
             await save_to_db_queue.put(new_products_data)
 
 
+async def create_temp_table_wb_id_existing_today(
+        client: AsyncClient,
+        today_date,
+        temp_table_name
+):
+    if temp_table_name == "product_data" or not temp_table_name:
+        raise ValueError
+    drop_table_query = f'''
+            DROP TABLE IF EXISTS {temp_table_name};
+            '''
+    await client.command(drop_table_query)
+    temp_table_query = f'''
+            CREATE TABLE IF NOT EXISTS {temp_table_name}(
+                wb_id UInt32 CODEC(LZ4HC)
+            ) ENGINE = MergeTree()
+            PRIMARY KEY (wb_id)
+            ORDER BY (wb_id);
+            '''
+    await client.command(temp_table_query)
+    temp_table_insert_query = f'''
+            INSERT INTO {temp_table_name}(wb_id) SELECT wb_id FROM product_data WHERE date = '{str(today_date)}' GROUP BY wb_id;
+            '''
+    await client.command(temp_table_insert_query)
+
+
 
 async def get_today_products_data(left, right):
     logger.info(f"Начался сбор по товарам: {left} - {right}")
     async with get_async_connection() as client:
         client: AsyncClient = client
         now = datetime.now()
-        # if now.hour < 10:
-        #     today = now.date() - timedelta(days=1)
-        #     yesterday = datetime.now().date() - timedelta(days=2)
-        # else:
         today = now.date()
         yesterday = datetime.now().date() - timedelta(days=1)
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
+        temp_table_name = "temp_table_wb_id_today"
+        await create_temp_table_wb_id_existing_today(
+            client=client, today_date=today, temp_table_name=temp_table_name
+        )
         page_size = 100000
-        if right - left < page_size:
-            page_size = right - left
         batch_size = 500
-
         db_save_task = asyncio.create_task(
             save_to_db(
                 queue=save_queue,
@@ -157,7 +179,30 @@ async def get_today_products_data(left, right):
                         print("trying to fetch")
                         q = await client.query(query)
                         result = q.result_rows
-                        print("db fetch!")
+                        if result:
+                            print("db fetch!")
+                        else:
+                            print("no products in yesterday")
+                        break
+                    except Exception as e:
+                        print(f"Фетч из бд: {e}")
+                        await asyncio.sleep(1)
+                query = f"""
+                SELECT  
+                    wb_id
+                FROM 
+                    {temp_table_name}
+                WHERE 
+                    wb_id BETWEEN {range_id + 1} AND {range_id + page_size};"""
+                while True:
+                    try:
+                        print("trying to fetch")
+                        q = await client.query(query)
+                        existing_wb_id = {row[0] for row in q.result_rows}
+                        if existing_wb_id:
+                            print("GOT TODAY PRODUCTS")
+                        else:
+                            print("No products data for today")
                         break
                     except Exception as e:
                         print(f"Фетч из бд: {e}")
@@ -174,6 +219,7 @@ async def get_today_products_data(left, right):
                 products = [
                     {wb_id: result_dict.get(wb_id)}
                     for wb_id in range(range_id + 1, range_id + page_size + 1)
+                    if wb_id not in existing_wb_id
                 ]
                 for i in range(0, len(products) + batch_size, batch_size):
                     batch = products[i : i + batch_size]
