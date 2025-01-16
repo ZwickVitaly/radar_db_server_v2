@@ -15,4 +15,4 @@ RUN poetry config virtualenvs.create false \
 
 COPY ./backend /app
 
-ENTRYPOINT python setup.py
+ENTRYPOINT python server.py
