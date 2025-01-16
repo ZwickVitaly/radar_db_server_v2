@@ -110,7 +110,7 @@ async def get_today_products_data(left, right):
         #     yesterday = datetime.now().date() - timedelta(days=2)
         # else:
         today = now.date()
-        yesterday = datetime.now().date()
+        yesterday = datetime.now().date() - timedelta(days=1)
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
         page_size = 100000
