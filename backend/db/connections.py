@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager, contextmanager
 import clickhouse_connect
 from clickhouse_connect.driver.asyncclient import AsyncClient
 
-from settings import CLICKHOUSE_CONFING
+from config.settings import CLICKHOUSE_CONFING
 
 
 @asynccontextmanager
@@ -25,15 +25,14 @@ class AsyncSession:
         self.client.close()
 
 
-
 @contextmanager
 def get_sync_connection():
     session = SyncSession(CLICKHOUSE_CONFING)
     with session as client:
         yield client
 
-class SyncSession:
 
+class SyncSession:
     def __init__(self, clickhouse_config):
         self.config = clickhouse_config
 

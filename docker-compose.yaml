@@ -4,6 +4,10 @@ services:
     container_name: ${CLICKHOUSE_DB_NAME}
     volumes:
       - ./app_data/db:/var/lib/clickhouse
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB}
     ports:
       - "9000:9000"
       - "8123:8123"

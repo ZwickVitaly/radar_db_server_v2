@@ -1,11 +1,10 @@
-import asyncio
 import gc
-
+from asyncio import Queue as AsyncQueue
 from clickhouse_connect.driver import AsyncClient
-from settings import logger
+from config.settings import logger
 
 
-async def save_to_db(queue: asyncio.Queue, table, fields, client: AsyncClient):
+async def save_to_db_worker(queue: AsyncQueue, table: str, fields: list[str], client: AsyncClient):
     while True:
         items = []
         item = []

@@ -27,15 +27,22 @@ REDIS_HOST = getenv("REDIS_CONTAINER_NAME", "localhost")
 
 CLICKHOUSE_CONFING = {
     "host": getenv("CLICKHOUSE_DB_NAME", "localhost"),
-    "username": getenv("CLICKHOUSE_USERNAME", "default"),
+    "username": getenv("CLICKHOUSE_USER", "default"),
+    "password": getenv("CLICKHOUSE_PASSWORD", ""),
+    "database": getenv("CLICKHOUSE_DB", "__default__"),
 }
-SECRET_KEY = getenv("SECRET_KEY", "FuzwkJ+n/R+BJIehXnX+xcUxnXVUZSa0sqrMMzWNjfp+aDPlL5j0BTAJpFQJnOIE")
+SECRET_KEY = getenv(
+    "SECRET_KEY", "FuzwkJ+n/R+BJIehXnX+xcUxnXVUZSa0sqrMMzWNjfp+aDPlL5j0BTAJpFQJnOIE"
+)
 
 ALGORITHM = "HS256"
 
 BOT_TOKEN = getenv("BOT_TOKEN", None)
 
 admins_list = (getenv("ADMINS", "")).split(",")
+
+MAIN_TABLE_NAME = "product_data"
+
 ADMINS = []
 for admin_id in admins_list:
     try:

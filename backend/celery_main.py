@@ -2,12 +2,12 @@ import os
 
 from celery import Celery
 from celery.schedules import crontab
-from settings import REDIS_HOST
+from config.settings import REDIS_HOST
 
 celery_app = Celery(
     "harvester",
     include=[
-        "actions",
+        "actions.harvest",
     ],
 )
 
@@ -22,6 +22,9 @@ celery_app.conf.broker_connection_retry_on_startup = True
 celery_app.conf.beat_schedule = {
     "products_data_get": {
         "task": "products_data_get",
-        "schedule": crontab(hour="7", minute="55",),
+        "schedule": crontab(
+            hour="23",
+            minute="0",
+        ),
     },
 }
