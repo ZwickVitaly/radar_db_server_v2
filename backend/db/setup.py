@@ -4,7 +4,7 @@ from db.connections import get_sync_connection
 
 def setup_database():
     logger.info("Setup start")
-    with get_sync_connection as client:
+    with get_sync_connection() as client:
         client.command(
             f"""
             CREATE TABLE IF NOT EXISTS {MAIN_TABLE_NAME}(
