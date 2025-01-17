@@ -83,7 +83,7 @@ async def get_today_products_data(left, right):
                     client=client
                 )
                 result_dict = {
-                    wb_id: {f"{day[0]}_{day[1]}": {"quantity": day[2], "price": day[3]}}
+                    wb_id: {f"{day[0].strip()}_{day[1]}": {"quantity": day[2], "price": day[3]}}
                     for wb_id, date_item in yesterday_data
                     for day in date_item
                 }

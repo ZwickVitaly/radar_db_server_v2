@@ -34,7 +34,7 @@ async def get_products_data(http_session, products, today_date):
                 latest_data = products_dict.pop(p_id, None)
                 for size in p.get("sizes"):
                     price = size.get("price", {}).get("total")
-                    orig_name = size.get("origName", "0")
+                    orig_name = size.get("origName", "0").strip()
                     stocks = size.get("stocks", [])
                     for wh in stocks:
                         wh_id = wh.get("wh")
@@ -61,6 +61,8 @@ async def get_products_data(http_session, products, today_date):
                 for key, val in latest_data.items():
                     size, wh = key.split("_")
                     quantity = val.get("quantity", 0)
+                    if not quantity:
+                        continue
                     price = val.get("price", 0)
                     new_data.append((p_id, today_date, size, int(wh), price, 0, quantity))
             return new_data
