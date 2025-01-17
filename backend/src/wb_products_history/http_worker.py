@@ -40,7 +40,7 @@ async def get_products_data(http_session, products, today_date):
                         wh_id = wh.get("wh")
                         qty = wh.get("qty")
                         if latest_data:
-                            prev_data = latest_data.get(f"{orig_name}_{wh_id}", {})
+                            prev_data = latest_data.pop(f"{orig_name}_{wh_id}", {})
                             if not price:
                                 price = prev_data.get("price", 0)
                             orders = max(prev_data.get("quantity", 0) - qty, 0)
@@ -58,6 +58,11 @@ async def get_products_data(http_session, products, today_date):
                                 orders,  # orders
                             )
                         )
+                for key, val in latest_data.items():
+                    size, wh = key.split("_")
+                    quantity = val.get("quantity", 0)
+                    price = val.get("price", 0)
+                    new_data.append((p_id, today_date, size, int(wh), price, 0, quantity))
             return new_data
         except Exception as error:
             logger.error(
