@@ -15,9 +15,6 @@ from src.wb_products_history.temp_table import (
 )
 
 
-
-
-
 async def get_today_products_data(left, right):
     logger.info(f"Начался сбор по товарам: {left} - {right}")
     async with get_async_connection() as client:
