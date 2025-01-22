@@ -32,6 +32,9 @@ async def get_products_data(http_session, products, today_date):
             for p in data:
                 p_id = p.get("id", 0)
                 latest_data = products_dict.pop(p_id, None)
+                logger.info(latest_data)
+                logger.info(p)
+                await asleep(5)
                 for size in p.get("sizes"):
                     price = size.get("price", {}).get("total")
                     orig_name = size.get("origName", "0").strip()
