@@ -26,34 +26,24 @@ async def get_products_data(http_session, products, today_date):
                     continue
             data = _data.get("data").get("products")
             if not data:
-                logger.info("no data")
                 return []
             new_data = []
             for p in data:
                 p_id = p.get("id", 0)
                 latest_data = products_dict.pop(p_id, None)
-                logger.info(latest_data)
-                logger.info(p)
                 for size in p.get("sizes"):
                     price = size.get("price", {}).get("total")
                     orig_name = size.get("origName", "0").strip()
                     stocks = size.get("stocks", [])
-                    logger.info(price)
-                    logger.info(orig_name)
-                    logger.info(stocks)
                     for wh in stocks:
                         wh_id = wh.get("wh")
                         qty = wh.get("qty")
-                        logger.info(f"new data {orig_name}_{wh_id}: {qty}")
                         if latest_data:
                             prev_data = latest_data.pop(f"{orig_name}_{wh_id}", {})
-                            logger.info(f"old data {prev_data}")
                             if not price:
                                 price = prev_data.get("price", 0)
                             latest_qty = prev_data.get("quantity", 0)
-                            logger.info(f"{latest_qty} - {qty}")
                             orders = max(latest_qty - qty, 0)
-                            logger.info(orders)
                         else:
                             orders = 0
 

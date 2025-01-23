@@ -92,6 +92,10 @@ async def get_today_products_data(left, right):
                     for wb_id in range(range_id + 1, range_id + page_size + 1)
                     if wb_id not in existing_wb_id
                 ]
+                for p in products:
+                    old_data = list(p.values())[0]
+                    if old_data:
+                        print(old_data)
                 for i in range(0, len(products) + batch_size, batch_size):
                     batch = products[i : i + batch_size]
                     if batch:
