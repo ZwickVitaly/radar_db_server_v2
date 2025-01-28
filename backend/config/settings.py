@@ -12,11 +12,11 @@ DEBUG = getenv("DEBUG", "1") == "1"
 BASE_DIR = Path(__file__).parent
 
 logger.remove()
-logger.add(
-    "app_data/logs/debug_logs.log" if DEBUG else "app_data/logs/bot.log",
-    rotation="00:00:00",
-    level="DEBUG" if DEBUG else "INFO",
-)
+# logger.add(
+#     "app_data/logs/debug_logs.log" if DEBUG else "app_data/logs/bot.log",
+#     rotation="00:00:00",
+#     level="DEBUG" if DEBUG else "INFO",
+# )
 logger.add(stdout, level="DEBUG" if DEBUG else "INFO")
 
 TIMEZONE = timezone("Europe/Moscow")
