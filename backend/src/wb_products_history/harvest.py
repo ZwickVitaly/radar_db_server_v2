@@ -22,10 +22,9 @@ async def get_today_products_data(left, right):
         now = datetime.now()
         if now.hour >= 10:
             today = now.date()
-            yesterday = datetime.now().date() - timedelta(days=1)
         else:
             today = now.date() - timedelta(days=1)
-            yesterday = datetime.now().date() - timedelta(days=2)
+        yesterday = today - timedelta(days=1)
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
         main_table_name = MAIN_TABLE_NAME
@@ -83,9 +82,8 @@ async def get_today_products_data(left, right):
                     client=client
                 )
                 result_dict = {
-                    wb_id: {f"{day[0].strip()}_{day[1]}": {"quantity": day[2], "price": day[3]}}
-                    for wb_id, date_item in yesterday_data
-                    for day in date_item
+                    wb_id: {f"{size[0].strip()}_{size[1]}": {"quantity": size[2], "price": size[3]} for size in yesterday_item}
+                    for wb_id, yesterday_item in yesterday_data
                 }
                 products = [
                     {wb_id: result_dict.get(wb_id)}
