@@ -4,6 +4,7 @@ services:
     container_name: ${CLICKHOUSE_DB_NAME}
     volumes:
       - ./app_data/db:/var/lib/clickhouse
+      - ./logs/db:/var/log/clickhouse-server
     environment:
       CLICKHOUSE_USER: ${CLICKHOUSE_USER}
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
@@ -27,7 +28,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./logs:/app_data/logs/searcher
+      - ./logs/worker:/app_data/logs/searcher
     ports:
       - "9013:9013"
     depends_on:
@@ -50,7 +51,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./logs:/app_data/logs/celery
+      - ./logs/beat:/app_data/logs/celery
     depends_on:
       - redis
     networks:
