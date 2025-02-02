@@ -9,9 +9,7 @@ from src.wb_products_history.http_worker import http_worker
 from db.connections import get_async_connection
 from src.wb_products_history.db_worker import save_to_db_worker
 from src.wb_products_history.temp_table import (
-    create_temp_table_wb_id_existing_today,
-    drop_temp_table,
-    get_temp_table_existing_ids
+    get_existing_ids
 )
 
 
@@ -28,13 +26,13 @@ async def get_today_products_data(left, right):
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
         main_table_name = MAIN_TABLE_NAME
-        temp_table_name = "temp_table_wb_id_today"
-        await create_temp_table_wb_id_existing_today(
-            client=client,
-            today_date=today,
-            temp_table_name=temp_table_name,
-            table_name=main_table_name
-        )
+        # temp_table_name = "temp_table_wb_id_today"
+        # await create_temp_table_wb_id_existing_today(
+        #     client=client,
+        #     today_date=today,
+        #     temp_table_name=temp_table_name,
+        #     table_name=main_table_name
+        # )
         page_size = 100000
         batch_size = 500
         db_save_task = asyncio.create_task(
@@ -75,8 +73,9 @@ async def get_today_products_data(left, right):
                     day=yesterday,
                     client=client
                 )
-                existing_wb_id = await get_temp_table_existing_ids(
-                    temp_table_name=temp_table_name,
+                existing_wb_id = await get_existing_ids(
+                    table_name=main_table_name,
+                    day=today,
                     left=range_id + 1,
                     right=range_id + page_size,
                     client=client
@@ -102,4 +101,5 @@ async def get_today_products_data(left, right):
             await asyncio.gather(*http_get_tasks)
             await save_queue.put(None)
             await asyncio.gather(db_save_task)
-            await drop_temp_table(client=client, temp_table_name=temp_table_name)
+            # await drop_temp_table(client=client, temp_table_name=temp_table_name)
+    return
