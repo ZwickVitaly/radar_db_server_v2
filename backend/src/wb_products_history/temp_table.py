@@ -86,7 +86,7 @@ async def get_existing_ids(
         WHERE 
             wb_id BETWEEN {left} AND {right}
         AND
-            date = {str(day)}
+            date = '{str(day)}'
         GROUP BY wb_id;"""
     while True:
         try:
