@@ -51,11 +51,13 @@ services:
     env_file:
       - .env
     volumes:
-      - ./logs/beat:/app_data/logs/celery
+      - ./logs/worker:/app_data/logs/celery
     depends_on:
       - redis
     networks:
       - wb_search
+    logging:
+      driver: "none"
 
   celery-beat:
     build: .
@@ -64,7 +66,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./logs:/app_data/logs/celery_beat
+      - ./logs/beat:/app_data/logs/celery_beat
     depends_on:
       - redis
     networks:
