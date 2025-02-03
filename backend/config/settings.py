@@ -25,7 +25,7 @@ SEARCH_URL = "https://search.wb.ru/exactmatch/ru/common/v9/search"
 
 REDIS_HOST = getenv("REDIS_CONTAINER_NAME", "localhost")
 
-CLICKHOUSE_CONFING = {
+CLICKHOUSE_CONFIG = {
     "host": getenv("CLICKHOUSE_DB_NAME", "localhost"),
     "username": getenv("CLICKHOUSE_USER", "default"),
     "password": getenv("CLICKHOUSE_PASSWORD", ""),
