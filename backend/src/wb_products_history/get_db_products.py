@@ -28,12 +28,8 @@ async def get_day_db_products(
             print("trying to fetch day data")
             q = await client.query(query)
             result = q.result_rows
-            if result:
-                print("db fetch! day data")
-            else:
-                print("no products in yesterday")
             break
         except Exception as e:
-            print(f"Фетч из бд day: {e}")
+            print(f"ОШИБКА:Фетч из бд day: {e}")
             await sleep(1)
     return result
