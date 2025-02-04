@@ -56,8 +56,7 @@ services:
       - redis
     networks:
       - wb_search
-    logging:
-      driver: "none"
+
 
   celery-beat:
     build: .
