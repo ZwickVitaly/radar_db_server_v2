@@ -59,6 +59,7 @@ async def get_today_catalog_data():
             for catalog_info in catalogs:
                 cat_id = catalog_info[0]
                 shard = catalog_info[1]
+                query = catalog_info[2]
                 if "&" in query:
                     split_query = catalog_info[2].split("&")
                     query = []
@@ -66,6 +67,8 @@ async def get_today_catalog_data():
                         left, right = part.split("=")
                         query.append(left)
                         query.append(right)
+                else:
+                    query = query.split("=")
                 await http_queue.put(
                     {
                         "catalog_id": cat_id,
