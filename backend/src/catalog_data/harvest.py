@@ -20,8 +20,7 @@ async def get_today_catalog_data():
         return
     async with get_async_connection() as client:
         catalogs_query = await client.query(
-            f"""SELECT id, shard, query FROM {CATALOG_ITEM_TABLE_NAME} FINAL;
-            """
+            f"""SELECT id, shard, query FROM {CATALOG_ITEM_TABLE_NAME} FINAL"""
         )
         catalogs = catalogs_query.result_rows
         today = datetime.now().date()
