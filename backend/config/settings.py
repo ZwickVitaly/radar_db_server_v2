@@ -41,7 +41,9 @@ BOT_TOKEN = getenv("BOT_TOKEN", None)
 
 admins_list = (getenv("ADMINS", "")).split(",")
 
-MAIN_TABLE_NAME = "product_data"
+PRODUCT_DATA_TABLE_NAME = "product_data"
+CATALOG_DATA_TABLE_NAME = "catalog_data"
+CATALOG_ITEM_TABLE_NAME = "catalog"
 
 ADMINS = []
 for admin_id in admins_list:

@@ -3,7 +3,7 @@ import datetime
 from clickhouse_connect.driver import AsyncClient
 from asyncio import sleep
 
-from config.settings import MAIN_TABLE_NAME
+from config.settings import PRODUCT_DATA_TABLE_NAME
 
 
 async def create_temp_table_wb_id_existing_today(
@@ -35,7 +35,7 @@ async def drop_temp_table(
     client: AsyncClient,
     temp_table_name,
 ):
-    if temp_table_name == MAIN_TABLE_NAME:
+    if temp_table_name == PRODUCT_DATA_TABLE_NAME:
         raise ValueError
     drop_table_query = f"""
         DROP TABLE IF EXISTS {temp_table_name};

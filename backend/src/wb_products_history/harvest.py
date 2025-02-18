@@ -3,11 +3,11 @@ import asyncio
 from aiohttp import ClientSession
 from clickhouse_connect.driver import AsyncClient
 
-from config.settings import logger, MAIN_TABLE_NAME
+from config.settings import logger, PRODUCT_DATA_TABLE_NAME
 from src.wb_products_history.get_db_products import get_day_db_products
 from src.wb_products_history.http_worker import http_worker
 from db.connections import get_async_connection
-from src.wb_products_history.db_worker import save_to_db_worker
+from src.common.db_worker import save_to_db_worker
 from src.wb_products_history.temp_table import (
     get_existing_ids
 )
@@ -25,7 +25,7 @@ async def get_today_products_data(left, right):
         yesterday = today - timedelta(days=1)
         save_queue = asyncio.Queue(2)
         http_queue = asyncio.Queue(10)
-        main_table_name = MAIN_TABLE_NAME
+        main_table_name = PRODUCT_DATA_TABLE_NAME
         # temp_table_name = "temp_table_wb_id_today"
         # await create_temp_table_wb_id_existing_today(
         #     client=client,
