@@ -6,19 +6,24 @@ async def get_catalog_data(http_session, catalog_id: int, catalog_shard: str, ca
     result_status = 0
     count = 1
     content = ""
+    query_dict = {
+        catalog_query[i]: catalog_query[i + 1]
+        for i in range(0, len(catalog_query), 2)
+    }
+    params = {
+        "appType": 64,
+        "curr": "rub",
+        "dest": -1257786,
+        "spp": 30,
+        "page": page,
+        "limit": 100
+    }
+    params.update(query_dict)
     while result_status != 200 or count < 5:
         try:
             async with http_session.get(
                 f"https://catalog.wb.ru/catalog/{catalog_shard}/v2/catalog",
-                params={
-                    "appType": 64,
-                    "curr": "rub",
-                    "dest": -1257786,
-                    "spp": 30,
-                    catalog_query[0]: catalog_query[1],
-                    "page": page,
-                    "limit": 100
-                },
+                params=params
             ) as resp:
                 result_status = resp.status
                 content = resp.content
