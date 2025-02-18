@@ -64,7 +64,7 @@ async def http_worker(
             await http_queue.put(catalog_info)
             return
         catalog_data = []
-        for i in range(1, 51):
+        for i in range(1, 25):
             new_catalog_data: list[tuple] = await get_catalog_data(
                 http_session=http_session,
                 catalog_id=catalog_info["catalog_id"],
