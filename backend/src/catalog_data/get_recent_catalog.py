@@ -74,4 +74,4 @@ async def update_catalog_items():
 
 if __name__ == '__main__':
     x = asyncio.run(get_catalog_items())
-    print(x)
+    print(len(x))
