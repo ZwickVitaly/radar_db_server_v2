@@ -31,7 +31,7 @@ celery_app.conf.beat_schedule = {
         "task": "catalog_data_get",
         "schedule": crontab(
             hour="13",
-            minute="23",
+            minute="32",
         ),
     },
 }
