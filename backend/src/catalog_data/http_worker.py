@@ -46,7 +46,7 @@ async def get_catalog_data(http_session, catalog_id: int, catalog_shard: str, ca
             if "ClientConnectionError" in str(content) and count > 1:
                 return []
             result_status = 0
-            await asleep(count * 0.5)
+            await asleep(5)
             count += 1
     return []
 
@@ -64,7 +64,7 @@ async def http_worker(
             await http_queue.put(catalog_info)
             return
         catalog_data = []
-        for i in range(1, 20):
+        for i in range(1, 21):
             new_catalog_data: list[tuple] = await get_catalog_data(
                 http_session=http_session,
                 catalog_id=catalog_info["catalog_id"],
@@ -73,7 +73,7 @@ async def http_worker(
                 page=i,
                 today_date=today_date,
             )
-            await asleep(2)
+            await asleep(0.5)
             catalog_data.extend(new_catalog_data)
             if catalog_data and not i % 10:
                 cd_to_write = [item for item in catalog_data]
