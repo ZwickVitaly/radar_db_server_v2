@@ -59,6 +59,7 @@ def prepare_catalog_items(catalog_items: list[dict]):
 async def insert_catalog_items(catalog_items: list[tuple]):
     async with get_async_connection() as conn:
         await conn.insert(CATALOG_ITEM_TABLE_NAME, column_names=["id", "name", "url", "shard", "query"], data=catalog_items)
+        await conn.command(f"""OPTIMIZE TABLE {CATALOG_ITEM_TABLE_NAME} FINAL""")
 
 
 async def update_catalog_items():
